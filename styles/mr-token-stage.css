@@ -1,0 +1,40 @@
+.mr-token-stage .window-content { padding: 0; overflow: auto; background: radial-gradient(circle at 10% 0%, rgba(155,123,255,.13), transparent 34%), #151821; color: #eef1f8; }
+.mr-token-stage .window-header { background: #10121a; border-bottom: 1px solid rgba(255,255,255,.12); }
+.mrts-shell { --mrts-accent:#9b7bff; --mrts-accent2:#57d8c8; --mrts-panel:#1b1f2a; --mrts-border:rgba(255,255,255,.11); padding: 12px; display:flex; flex-direction:column; gap:10px; font-size:13px; }
+.mrts-shell.mrts-large { font-size:15px; }
+.mrts-shell.mrts-contrast { --mrts-border:rgba(255,255,255,.45); }
+.mrts-hero { display:grid; grid-template-columns:46px 1fr auto; align-items:center; gap:10px; padding:5px 3px 10px; }
+.mrts-hero img { width:46px; height:46px; border-radius:11px; }
+.mrts-hero h2 { margin:0; font-size:19px; letter-spacing:.02em; }
+.mrts-hero p { margin:2px 0 0; opacity:.65; font-size:11px; text-transform:uppercase; letter-spacing:.12em; }
+.mrts-selection { font-size:11px; opacity:.72; border:1px solid var(--mrts-border); padding:5px 7px; border-radius:999px; white-space:nowrap; }
+.mrts-card { background:rgba(27,31,42,.92); border:1px solid var(--mrts-border); border-radius:10px; padding:10px; box-shadow:0 8px 24px rgba(0,0,0,.14); }
+.mrts-card-title { font-size:11px; text-transform:uppercase; letter-spacing:.08em; font-weight:700; opacity:.8; margin-bottom:8px; display:flex; align-items:center; gap:7px; }
+.mrts-scale-row { display:grid; grid-template-columns:38px 1fr 38px; gap:7px; }
+.mrts-shell button, .mrts-shell input { min-height:32px; border-radius:7px; border:1px solid var(--mrts-border); }
+.mrts-shell input { background:#10131a; color:#f2f4f9; padding:0 8px; }
+.mrts-shell button { background:#232938; color:#f2f4f9; cursor:pointer; transition:transform .12s ease, background .12s ease, border-color .12s ease; }
+.mrts-shell button:hover { background:#2c3447; border-color:rgba(155,123,255,.65); transform:translateY(-1px); }
+.mrts-shell button:focus-visible, .mrts-shell input:focus-visible { outline:2px solid var(--mrts-accent2); outline-offset:2px; }
+.mrts-range { width:100%; accent-color:var(--mrts-accent); margin:8px 0 5px; }
+.mrts-pills { display:grid; grid-template-columns:repeat(8,1fr); gap:4px; }
+.mrts-pills button { min-height:26px; font-size:11px; padding:0; }
+.mrts-grid2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.mrts-fields { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.mrts-fields label { display:grid; grid-template-columns:18px 1fr; gap:3px; align-items:center; opacity:.85; }
+.mrts-actions { display:flex; gap:6px; margin-top:8px; }
+.mrts-actions button { flex:1; }
+.mrts-icon-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.mrts-icon-grid button { display:flex; flex-direction:column; gap:3px; align-items:center; justify-content:center; min-height:49px; font-size:11px; }
+.mrts-icon-grid i { font-size:15px; color:var(--mrts-accent2); }
+.mrts-wide-actions button:first-child, .mrts-wide-actions button:nth-child(2) { background:linear-gradient(135deg, rgba(155,123,255,.22), rgba(87,216,200,.12)); }
+.mrts-presets { display:grid; grid-template-columns:repeat(5,1fr); gap:5px; }
+.mrts-presets button { min-height:45px; padding:5px 3px; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:4px; font-size:10px; }
+.mrts-presets i { color:var(--mrts-accent); }
+.mrts-save-preset { display:grid; grid-template-columns:1fr 38px; gap:6px; margin-top:7px; }
+.mrts-footer-tools { display:grid; grid-template-columns:repeat(5,1fr); gap:5px; }
+.mrts-footer-tools button { font-size:11px; padding:4px; }
+.mrts-status { display:flex; justify-content:space-between; gap:8px; font-size:10px; opacity:.68; padding:0 3px 3px; }
+.mrts-status strong { color:var(--mrts-accent2); }
+@media (max-width:420px) { .mrts-grid2{grid-template-columns:1fr}.mrts-presets{grid-template-columns:repeat(3,1fr)}.mrts-footer-tools{grid-template-columns:repeat(3,1fr)}.mrts-pills{grid-template-columns:repeat(4,1fr)} }
+@media (prefers-reduced-motion: reduce) { .mrts-shell button { transition:none; } }
