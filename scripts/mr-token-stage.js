@@ -1,5 +1,5 @@
 const MODULE_ID = "mr-token-stage";
-const VERSION = "1.0.0";
+const VERSION = "1.0.1";
 
 const BUILTIN_PRESETS = {
   normal: { label: "Normal", icon: "fa-circle", scaleX: 1, scaleY: 1, alpha: 1, offsetX: 0, offsetY: 0, textureRotation: 0 },
@@ -511,7 +511,7 @@ class MRTokenStageApp extends LegacyApplication {
       else if (a === "preset") await applyPreset(btn.dataset.preset);
       else if (a === "save-preset") await savePreset(val("presetName"));
       else if (a === "copy") await copyAppearance();
-      else if (a ==== "paste") await pasteAppearance();
+      else if (a === "paste") await pasteAppearance();
       else if (a === "equalize") await equalize("scale");
       else if (a === "undo") await undo();
       else if (a === "restore") await restoreOriginal();
@@ -540,25 +540,135 @@ function openPanel() {
 
 function registerControls() {
   Hooks.on("getSceneControlButtons", controls => {
-    const tokenControl = Array.isArray(controls)
-      ? controls.find(c => c.name === "token" || c.name === "tokens")
-      : (controls.tokens ?? controls.token);
-    if (!tokenControl) return;
-    const tool = {
-      name: "mr-token-stage",
-      title: "MRTS.Open",
-      icon: "fa-solid fa-masks-theater",
-      order: Object.keys(tokenControl.tools ?? {}).length + 100,
-      button: true,
-      visible: game.user.isGM || game.settings.get(MODULE_ID, "allowPlayers"),
-      onChange: (_event, active) => { if (active !== false) openPanel(); },
-      onClick: openPanel
-    };
-    if (Array.isArray(tokenControl.tools)) tokenControl.tools.push(tool);
-    else {
-      tokenControl.tools ??= {};
-      tokenControl.tools[tool.name] = tool;
+    const visible = game.user.isGM || game.settings.get(MODULE_ID, "allowPlayers");
+
+    // Foundry v13/v14 use a Record<string, SceneControl>. Add MR Token Stage
+    // as its own top-level control group so it always has a dedicated icon
+    // in the left Scene Controls bar.
+    if (!Array.isArray(controls)) {
+      const existingOrders = Object.values(controls).map(c => Number(c?.order ?? 0));
+      const order = (existingOrders.length ? Math.max(...existingOrders) : 0) + 10;
+
+      controls["mr-token-stage"] = {
+        name: "mr-token-stage",
+        title: "MR Token Stage",
+        icon: "fa-solid fa-masks-theater",
+        order,
+        visible,
+        activeTool: "open-panel",
+        tools: {
+          "open-panel": {
+            name: "open-panel",
+            title: "Abrir panel MR Token Stage",
+            icon: "fa-solid fa-sliders",
+            order: 0,
+            button: true,
+            visible,
+            onChange: (_event, active) => { if (active !== false) openPanel(); }
+          },
+          "scale-up": {
+            name: "scale-up",
+            title: "Aumentar escala visual 10%",
+            icon: "fa-solid fa-magnifying-glass-plus",
+            order: 10,
+            button: true,
+            visible,
+            onChange: (_event, active) => { if (active !== false) scale(1.1, { relative: true }); }
+          },
+          "scale-down": {
+            name: "scale-down",
+            title: "Reducir escala visual 10%",
+            icon: "fa-solid fa-magnifying-glass-minus",
+            order: 20,
+            button: true,
+            visible,
+            onChange: (_event, active) => { if (active !== false) scale(0.9, { relative: true }); }
+          },
+          humanize: {
+            name: "humanize",
+            title: "Humanizar grupo",
+            icon: "fa-solid fa-people-group",
+            order: 30,
+            button: true,
+            visible,
+            onChange: (_event, active) => { if (active !== false) humanize(0.1); }
+          },
+          focus: {
+            name: "focus",
+            title: "Focus",
+            icon: "fa-solid fa-eye",
+            order: 40,
+            button: true,
+            visible,
+            onChange: (_event, active) => { if (active !== false) focusSelected(); }
+          },
+          spotlight: {
+            name: "spotlight",
+            title: "Spotlight",
+            icon: "fa-solid fa-sun",
+            order: 50,
+            button: true,
+            visible,
+            onChange: (_event, active) => { if (active !== false) focusSelected({ spotlight: true }); }
+          },
+          "clear-focus": {
+            name: "clear-focus",
+            title: "Limpiar Focus / Spotlight",
+            icon: "fa-solid fa-eye-slash",
+            order: 60,
+            button: true,
+            visible,
+            onChange: (_event, active) => { if (active !== false) clearFocus(); }
+          },
+          scenic: {
+            name: "scenic",
+            title: "Token escénico",
+            icon: "fa-solid fa-masks-theater",
+            order: 70,
+            button: true,
+            visible,
+            onChange: (_event, active) => { if (active !== false) scenicMode(); }
+          },
+          undo: {
+            name: "undo",
+            title: "Deshacer último cambio de MR Token Stage",
+            icon: "fa-solid fa-rotate-left",
+            order: 80,
+            button: true,
+            visible,
+            onChange: (_event, active) => { if (active !== false) undo(); }
+          },
+          restore: {
+            name: "restore",
+            title: "Restaurar aspecto original",
+            icon: "fa-solid fa-clock-rotate-left",
+            order: 90,
+            button: true,
+            visible,
+            onChange: (_event, active) => { if (active !== false) restoreOriginal(); }
+          }
+        }
+      };
+      return;
     }
+
+    // Fallback for older/legacy control structures.
+    controls.push({
+      name: "mr-token-stage",
+      title: "MR Token Stage",
+      icon: "fa-solid fa-masks-theater",
+      layer: "tokens",
+      visible,
+      activeTool: "open-panel",
+      tools: [{
+        name: "open-panel",
+        title: "Abrir panel MR Token Stage",
+        icon: "fa-solid fa-sliders",
+        button: true,
+        visible,
+        onClick: openPanel
+      }]
+    });
   });
 }
 
