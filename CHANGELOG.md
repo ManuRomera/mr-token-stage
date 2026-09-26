@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.1 — 2026-09-26
+
+- Fixed a JavaScript syntax error that prevented the module UI from loading.
+- Added a dedicated **MR Token Stage** control group to Foundry's left Scene Controls bar.
+- Added quick toolbar actions for opening the panel, scale ±10%, Humanize, Focus, Spotlight, Scenic, Undo and Restore.
+- Kept Foundry v13/v14 record-based Scene Controls compatibility with a legacy fallback.
+
 ## 1.0.0 — 2026-09-26
 
 - First public build.
