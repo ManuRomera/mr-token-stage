@@ -1,22 +1,48 @@
 name: Build Foundry Module Release
 on:
   push:
+    branches:
+      - main
     tags:
       - 'v*'
+  workflow_dispatch:
+
 permissions:
   contents: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build zip
+
+      - name: Read module version
+        id: version
+        shell: bash
+        run: |
+          VERSION=$(jq -r '.version' module.json)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Build Foundry module ZIP
+        shell: bash
         run: |
           zip -r mr-token-stage.zip module.json scripts styles lang assets README.md CHANGELOG.md LICENSE -x '*.DS_Store'
-      - name: Publish release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            mr-token-stage.zip
-            module.json
-          generate_release_notes: true
+
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+          VERSION: ${{ steps.version.outputs.version }}
+        shell: bash
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists; refreshing assets."
+            gh release upload "$TAG" mr-token-stage.zip module.json --clobber
+          else
+            echo "Creating release $TAG."
+            gh release create "$TAG" mr-token-stage.zip module.json \
+              --target "$GITHUB_SHA" \
+              --title "MR Token Stage v$VERSION" \
+              --generate-notes
+          fi
