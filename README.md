@@ -40,6 +40,19 @@ Or download `mr-token-stage.zip`, extract it into Foundry's `Data/modules/` dire
 
 ## Quick use
 
+### Integrated left toolbar
+
+MR Token Stage has its **own Scene Controls icon** in Foundry's left toolbar (the theatre masks icon). Click it to reveal quick actions:
+
+- Open the full MR Token Stage panel.
+- Visual scale +10% / -10%.
+- Humanize group.
+- Focus / Spotlight / Clear Focus.
+- Scenic Token.
+- Undo.
+- Restore original appearance.
+
+
 1. Select one or more tokens.
 2. Open **Token Controls → MR Token Stage**.
 3. Apply scale, framing, a preset or a scene-direction action.
